@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34003.232
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPerfLiteDB", "TestPerfLiteDB\TestPerfLiteDB.csproj", "{54EBE560-C586-4255-B8FE-910AB9332103}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPerfLiteDB_CoreCLR", "TestPerfLiteDB_CoreCLR\TestPerfLiteDB_CoreCLR.csproj", "{547BEC1F-E6F3-436B-A2DD-5FCF85C2D2B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +17,15 @@ Global
 		{54EBE560-C586-4255-B8FE-910AB9332103}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54EBE560-C586-4255-B8FE-910AB9332103}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54EBE560-C586-4255-B8FE-910AB9332103}.Release|Any CPU.Build.0 = Release|Any CPU
+		{547BEC1F-E6F3-436B-A2DD-5FCF85C2D2B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{547BEC1F-E6F3-436B-A2DD-5FCF85C2D2B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{547BEC1F-E6F3-436B-A2DD-5FCF85C2D2B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{547BEC1F-E6F3-436B-A2DD-5FCF85C2D2B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3E15A2E8-1F87-460F-A4F1-00B13B4CBC02}
 	EndGlobalSection
 EndGlobal

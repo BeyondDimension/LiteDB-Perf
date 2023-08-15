@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+#if NETCOREAPP
+using Microsoft.Data.Sqlite;
+#else
 using System.Data.SQLite;
+#endif
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -13,9 +17,9 @@ namespace TestPerfLiteDB
     {
         static void Main(string[] args)
         {
-            RunTest("LiteDB: default", new LiteDB_Test(5000, null, new FileOptions { Journal = true, FileMode = FileOpenMode.Shared }));
-            RunTest("LiteDB: encrypted", new LiteDB_Test(5000, "mypass", new FileOptions { Journal = true, FileMode = FileOpenMode.Shared }));
-            RunTest("LiteDB: exclusive no journal", new LiteDB_Test(5000, null, new FileOptions { Journal = false, FileMode = FileOpenMode.Exclusive }));
+            RunTest("LiteDB: default", new LiteDB_Test(5000/*, null, new FileOptions { Journal = true, FileMode = FileOpenMode.Shared }*/));
+            RunTest("LiteDB: encrypted", new LiteDB_Test(5000/*, "mypass", new FileOptions { Journal = true, FileMode = FileOpenMode.Shared }*/));
+            RunTest("LiteDB: exclusive no journal", new LiteDB_Test(5000/*, null, new FileOptions { Journal = false, FileMode = FileOpenMode.Exclusive }*/));
 
             RunTest("SQLite: default", new SQLite_Test(5000, null, true));
             RunTest("SQLite: encrypted", new SQLite_Test(5000, "mypass", true));

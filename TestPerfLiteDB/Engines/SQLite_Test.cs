@@ -1,7 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+#if NETCOREAPP
+using Microsoft.Data.Sqlite;
+using SQLiteConnection = Microsoft.Data.Sqlite.SqliteConnection;
+using SQLiteCommand = Microsoft.Data.Sqlite.SqliteCommand;
+using SQLiteParameter = Microsoft.Data.Sqlite.SqliteParameter;
+#else
 using System.Data.SQLite;
+#endif
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -14,6 +21,7 @@ namespace TestPerfLiteDB
     {
         private string _filename;
         private SQLiteConnection _db;
+        SQLite.SQLiteConnection db2;
         private int _count;
 
         public int Count { get { return _count; } }
@@ -27,6 +35,19 @@ namespace TestPerfLiteDB
             if (password != null) cs += "; Password=" + password;
             if (journal == false) cs += "; Journal Mode=Off";
             _db = new SQLiteConnection(cs);
+            var _filename2 = "sqlite22-" + Guid.NewGuid().ToString("n") + ".db";
+
+            db2 = new SQLite.SQLiteConnection(_filename2);
+            db2.CreateTable<TableTest>();
+        }
+
+        class TableTest
+        {
+            public int Id { get; set; }
+
+            public string? Name { get; set; }
+
+            public string? Lorem { get; set; }
         }
 
         public void Prepare()
@@ -41,6 +62,20 @@ namespace TestPerfLiteDB
         }
 
         public void Insert()
+        {
+            foreach (var doc in Helper.GetDocs(_count))
+            {
+                TableTest m = new()
+                {
+                    Id = doc["_id"].AsInt32,
+                    Name = doc["name"].AsString,
+                    Lorem = doc["lorem"].AsString,
+                };
+                db2.Insert(m);
+            }
+        }
+
+        public void Insert2()
         {
             var cmd = new SQLiteCommand("INSERT INTO col (id, name, lorem) VALUES (@id, @name, @lorem)", _db);
 
@@ -60,25 +95,25 @@ namespace TestPerfLiteDB
 
         public void Bulk()
         {
-            using (var trans = _db.BeginTransaction())
-            {
-                var cmd = new SQLiteCommand("INSERT INTO col_bulk (id, name, lorem) VALUES (@id, @name, @lorem)", _db);
+            //using (var trans = _db.BeginTransaction())
+            //{
+            //    var cmd = new SQLiteCommand("INSERT INTO col_bulk (id, name, lorem) VALUES (@id, @name, @lorem)", _db);
 
-                cmd.Parameters.Add(new SQLiteParameter("id", DbType.Int32));
-                cmd.Parameters.Add(new SQLiteParameter("name", DbType.String));
-                cmd.Parameters.Add(new SQLiteParameter("lorem", DbType.String));
+            //    cmd.Parameters.Add(new SQLiteParameter("id", DbType.Int32));
+            //    cmd.Parameters.Add(new SQLiteParameter("name", DbType.String));
+            //    cmd.Parameters.Add(new SQLiteParameter("lorem", DbType.String));
 
-                foreach (var doc in Helper.GetDocs(_count))
-                {
-                    cmd.Parameters["id"].Value = doc["_id"].AsInt32;
-                    cmd.Parameters["name"].Value = doc["name"].AsString;
-                    cmd.Parameters["lorem"].Value = doc["lorem"].AsString;
+            //    foreach (var doc in Helper.GetDocs(_count))
+            //    {
+            //        cmd.Parameters["id"].Value = doc["_id"].AsInt32;
+            //        cmd.Parameters["name"].Value = doc["name"].AsString;
+            //        cmd.Parameters["lorem"].Value = doc["lorem"].AsString;
 
-                    cmd.ExecuteNonQuery();
-                }
+            //        cmd.ExecuteNonQuery();
+            //    }
 
-                trans.Commit();
-            }
+            //    trans.Commit();
+            //}
         }
 
         public void Update()

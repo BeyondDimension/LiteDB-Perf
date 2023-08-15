@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+#if NETCOREAPP
+using Microsoft.Data.Sqlite;
+#else
 using System.Data.SQLite;
+#endif
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -22,14 +26,14 @@ namespace TestPerfLiteDB
             var time = sw.ElapsedMilliseconds.ToString().PadLeft(5, ' ');
             var seg = Math.Round(test.Count / sw.Elapsed.TotalSeconds).ToString().PadLeft(8, ' ');
 
-            Console.WriteLine(name.PadRight(15, ' ') + ": " + 
-                time + " ms - " + 
+            Console.WriteLine(name.PadRight(15, ' ') + ": " +
+                time + " ms - " +
                 seg + " records/second");
         }
 
         public static IEnumerable<BsonDocument> GetDocs(int count)
         {
-            for(var i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 yield return new BsonDocument
                 {
